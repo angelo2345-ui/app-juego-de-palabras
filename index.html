@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Juntas o Separadas</title>
+<meta name="description" content="Juego de ortografía: elige si la palabra va junta o separada antes de que se acabe el tiempo.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Mono:wght@500&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<main class="wrap">
+
+  <section id="start" class="wrap" style="gap:22px">
+    <div class="hero">
+      <div>
+        <p class="eyebrow">Ortografía · Examen en vivo</p>
+        <h1 style="margin-top:12px">Juntas o separadas</h1>
+        <p class="lead">Elige cómo se escribe cada palabra antes de que se acabe el tiempo. Cada respuesta correcta suma puntos, y la rapidez y las rachas suman más.</p>
+      </div>
+      <div class="demo" aria-hidden="true">
+        <div class="w"><span>si</span><i class="g"></i><span>no</span></div>
+        <div class="cap"><span class="c1">sino · una palabra</span><span class="c2">si no · dos palabras</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="field">
+        <label for="name">Tu nombre (aparece en el ranking)</label>
+        <input id="name" class="text" type="text" maxlength="24" autocomplete="off" placeholder="Nombre y apellido">
+      </div>
+      <fieldset class="modes">
+        <legend>Modo de juego</legend>
+        <label class="mode"><input type="radio" name="mode" value="examen" checked>
+          <span><b>Examen</b><small>12 preguntas, 20 segundos cada una. Se resuelven todas.</small></span></label>
+        <label class="mode"><input type="radio" name="mode" value="super">
+          <span><b>Supervivencia</b><small>3 vidas. Cada error resta una. Gana quien llegue más lejos.</small></span></label>
+      </fieldset>
+      <button id="go" class="btn" type="button">Empezar</button>
+      <details class="repaso">
+        <summary>Repaso rápido antes de jugar</summary>
+        <dl id="repaso"></dl>
+      </details>
+    </div>
+  </section>
+
+  <section id="play" class="wrap" style="gap:18px" hidden>
+    <div class="hud">
+      <span id="qn">Pregunta 1 / 12</span>
+      <div class="stats">
+        <span>Puntos <b id="pts">0</b></span>
+        <span>Racha <b id="streak">0</b></span>
+        <span id="livesWrap">Vidas <span class="lives" id="lives"></span></span>
+        <span><b id="secs">20</b> s</span>
+      </div>
+    </div>
+    <div class="timer" id="timer" role="presentation"><i id="bar"></i></div>
+    <div class="panel">
+      <p class="eyebrow">Completa la oración</p>
+      <p class="q" id="sentence"></p>
+      <div class="opts" id="opts" role="group" aria-label="Opciones"></div>
+      <div class="fb" id="fb" aria-live="polite" hidden>
+        <h3 id="fbTitle"></h3>
+        <p id="fbWhy"></p>
+        <button id="next" class="btn" type="button">Siguiente</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="result" class="wrap" style="gap:20px" hidden>
+    <div class="panel">
+      <p class="eyebrow" id="rWho">Resultado</p>
+      <div class="score"><span class="n" id="rScore">0</span><span class="u">puntos</span></div>
+      <p class="rank" id="rRank"></p>
+      <div class="stats-grid">
+        <div class="stat"><b id="rHits">0</b><span>Aciertos</span></div>
+        <div class="stat"><b id="rPct">0%</b><span>Precisión</span></div>
+        <div class="stat"><b id="rNota">0</b><span>Nota sobre 20</span></div>
+        <div class="stat"><b id="rBest">0</b><span>Mejor racha</span></div>
+      </div>
+      <div class="btn-row">
+        <button id="again" class="btn" type="button">Jugar otra vez</button>
+        <button id="copy" class="btn ghost" type="button">Copiar mi resultado</button>
+      </div>
+      <textarea id="shareBox" readonly hidden aria-label="Resultado para copiar"></textarea>
+      <p class="note" id="saveNote"></p>
+    </div>
+    <div class="panel" id="missedPanel">
+      <h2 style="font-size:1.5rem">Para repasar</h2>
+      <ul class="missed" id="missed"></ul>
+    </div>
+  </section>
+
+  <section id="boards" class="panel">
+    <div class="board-head">
+      <h2 style="font-size:1.5rem">Ranking</h2>
+      <div class="tabs" role="group" aria-label="Modo del ranking">
+        <button class="tab" type="button" data-m="examen" aria-pressed="true">Examen</button>
+        <button class="tab" type="button" data-m="super" aria-pressed="false">Supervivencia</button>
+      </div>
+    </div>
+    <div class="boards-grid">
+      <div class="board" id="groupBoard" hidden>
+        <h3>De la clase (en línea)</h3>
+        <ol id="groupList"></ol>
+      </div>
+      <div class="board">
+        <h3>En este dispositivo</h3>
+        <ol id="localList"></ol>
+      </div>
+    </div>
+    <p class="note" id="boardNote"></p>
+  </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="questions.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
