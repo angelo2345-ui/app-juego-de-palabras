@@ -21,7 +21,7 @@ Juego de ortografía para practicar si una palabra va **junta o separada** (sino
 
 ## Probar en tu computadora
 
-Abre `index.html` en el navegador. No necesita servidor ni internet (el ranking en línea se activa solo si configuras Supabase).
+Abre `index.html` en el navegador. Puedes jugar sin servidor; el ranking de la clase necesita conexión a internet (Supabase).
 
 Si quieres levantarlo como servidor local:
 
@@ -78,4 +78,4 @@ create policy "insertar publico"
 
 > La clave `anon` es **pública** y está diseñada para usarse en el navegador; no es un secreto. El acceso se controla con las políticas (RLS) de la tabla. No uses la clave `service_role` en el frontend.
 
-Si dejas `config.js` vacío, el juego funciona igual y el ranking se guarda solo en cada dispositivo.
+Si dejas `config.js` vacío, el juego funciona pero no muestra el ranking de la clase.

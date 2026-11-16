@@ -27,7 +27,7 @@ if (window.supabase && CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY) {
 
 /* ---------- Utilidades ---------- */
 var $ = function(s){ return document.querySelector(s); };
-var LIMIT = 20000, EXAM_N = 12, KEY = "juntas-o-separadas-v1";
+var LIMIT = 20000, EXAM_N = 12;
 
 function shuffle(a){
   for (var i = a.length - 1; i > 0; i--){
@@ -233,38 +233,24 @@ function finish(){
 }
 
 /* ---------- Ranking ---------- */
-function loadLocal(){
-  try { var r = JSON.parse(localStorage.getItem(KEY)); return Array.isArray(r) ? r : []; }
-  catch (e){ return []; }
-}
-function saveLocal(rows){
-  try { localStorage.setItem(KEY, JSON.stringify(rows)); } catch (e){}
-}
-
 function saveResult(){
   if (G.saved) return;
   G.saved = true;
-  var row = { name: G.name, score: G.score, correct: G.correct, total: G.total, mode: G.mode, t: Date.now() };
-  var rows = loadLocal();
-  rows.push(row);
-  rows.sort(function(a, b){ return b.score - a.score; });
-  saveLocal(rows.slice(0, 40));
-
-  if (sb){
-    sb.from(TABLE).insert({
-      name: row.name, score: row.score, correct: row.correct,
-      total: row.total, mode: row.mode
-    }).then(function(res){
-      if (res.error){
-        $("#saveNote").textContent = "Tu resultado quedó solo en este dispositivo (no se pudo enviar al ranking de la clase).";
-      } else {
-        $("#saveNote").textContent = "Tu resultado se envió al ranking de la clase.";
-        renderBoards();
-      }
-    });
-  } else {
-    $("#saveNote").textContent = "Tu resultado quedó guardado en este dispositivo.";
+  if (!sb){
+    $("#saveNote").textContent = "No se pudo enviar tu resultado al ranking de la clase.";
+    return;
   }
+  sb.from(TABLE).insert({
+    name: G.name, score: G.score, correct: G.correct,
+    total: G.total, mode: G.mode
+  }).then(function(res){
+    if (res.error){
+      $("#saveNote").textContent = "No se pudo enviar tu resultado al ranking de la clase.";
+    } else {
+      $("#saveNote").textContent = "Tu resultado se envió al ranking de la clase.";
+      renderBoards();
+    }
+  });
 }
 
 function fillList(ol, rows, emptyMsg){
@@ -284,12 +270,9 @@ function fillList(ol, rows, emptyMsg){
 }
 
 function renderBoards(){
-  var loc = loadLocal().filter(function(r){ return r.mode === boardMode; }).slice(0, 10);
-  fillList($("#localList"), loc, "Todavía no has jugado este modo aquí.");
-
   if (!sb){
     $("#groupBoard").hidden = true;
-    $("#boardNote").textContent = "El ranking de la clase se activa al configurar Supabase (ver config.js).";
+    $("#boardNote").textContent = "El ranking de la clase no está disponible: falta configurar Supabase (ver config.js).";
     return;
   }
   $("#groupBoard").hidden = false;
