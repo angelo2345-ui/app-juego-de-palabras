@@ -28,7 +28,8 @@
     <div class="panel">
       <div class="field">
         <label for="name">Tu nombre (aparece en el ranking)</label>
-        <input id="name" class="text" type="text" maxlength="24" autocomplete="off" placeholder="Nombre y apellido">
+        <input id="name" class="text" type="text" maxlength="24" autocomplete="off" placeholder="Nombre y apellido" required aria-describedby="nameError">
+        <p class="field-error" id="nameError" role="alert" hidden>Escribe tu nombre para empezar.</p>
       </div>
       <fieldset class="modes">
         <legend>Modo de juego</legend>

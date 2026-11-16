@@ -68,8 +68,19 @@ function renderSentence(el, q, fill){
 /* ---------- Estado del juego ---------- */
 var G = null, timerId = null, boardMode = "examen";
 
+function nameError(on){
+  $("#nameError").hidden = !on;
+  $("#name").classList.toggle("invalid", on);
+}
+
 function startGame(){
-  var name = $("#name").value.trim() || "Anónimo";
+  var name = $("#name").value.trim();
+  if (!name){
+    nameError(true);
+    $("#name").focus();
+    return;
+  }
+  nameError(false);
   var mode = document.querySelector('input[name="mode"]:checked').value;
   var pool = shuffle(BANK.slice());
   G = {
@@ -313,6 +324,7 @@ function syncTabs(){
 /* ---------- Eventos ---------- */
 $("#go").addEventListener("click", startGame);
 $("#name").addEventListener("keydown", function(e){ if (e.key === "Enter") startGame(); });
+$("#name").addEventListener("input", function(){ if ($("#name").value.trim()) nameError(false); });
 $("#next").addEventListener("click", next);
 $("#again").addEventListener("click", function(){ show("start"); renderBoards(); });
 $("#copy").addEventListener("click", function(){
